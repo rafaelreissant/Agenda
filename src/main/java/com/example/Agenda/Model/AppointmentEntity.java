@@ -18,7 +18,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @Table(name = "tb_appointment")
-public class Appointment {
+public class AppointmentEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -47,5 +47,5 @@ public class Appointment {
     @NotNull
     @ManyToOne
     @JoinColumn(name = "category_id")
-    private Category category;
+    private CategoryEntity categoryEntity;
 }
