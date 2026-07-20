@@ -44,7 +44,6 @@ public class AppointmentEntity {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "category_id")
     private CategoryEntity categoryEntity;
