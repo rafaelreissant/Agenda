@@ -2,6 +2,7 @@ package com.example.Agenda.Model;
 
 import com.example.Agenda.Enums.Priority;
 import com.example.Agenda.Enums.Status;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

@@ -25,11 +25,19 @@ public class AppointmentService {
             throw new IllegalArgumentException("End date/time must be after start date/time.");
         }
 
-        CategoryEntity category = categoryRepository.findById(appointment.getCategoryEntity().getId())
-                .orElseThrow(() -> new RuntimeException("Category not found"));
-
-        appointment.setCategoryEntity(category);
         appointmentRepository.save(appointment);
+    }
+
+    public AppointmentEntity addingCategoryToAppointment(String idAppointment, String idCategory){
+        AppointmentEntity appointmentEntity = appointmentRepository.findById(UUID.fromString(idAppointment))
+                .orElseThrow(() -> new RuntimeException("Id Appointment not found"));
+
+        CategoryEntity categoryEntity = categoryRepository.findById(UUID.fromString(idCategory))
+                .orElseThrow(() -> new RuntimeException("Id Category not found"));
+
+        appointmentEntity.setCategoryEntity(categoryEntity);
+
+        return appointmentRepository.save(appointmentEntity);
     }
 
     public List<AppointmentEntity> findAll(){
