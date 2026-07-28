@@ -19,10 +19,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
@@ -64,6 +63,75 @@ class AppointmentServiceTest {
     }
 
     @Test
+    void saveAppointmentWithEndEqualToStart() {
+        AppointmentEntity appointment = new AppointmentEntity();
+        appointment.setTitle("Treino");
+        appointment.setDescription("Treino de futebol");
+        appointment.setStartDateTime(LocalDateTime.of(2026, 7, 20, 19, 0));
+        appointment.setEndDateTime(LocalDateTime.of(2026, 7, 20, 19, 0));
+        appointment.setPriority(Priority.MEDIUM);
+        appointment.setStatus(Status.SCHEDULED);
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> appointmentService.saveAppointment(appointment)
+        );
+
+        assertEquals(
+                "Start and End can't have the exactly same date",
+                exception.getMessage()
+        );
+
+        verify(appointmentRepository, never()).save(any());
+    }
+
+    @Test
+    void saveAppointmentWhereStartBeforeToday() {
+        AppointmentEntity appointment = new AppointmentEntity();
+        appointment.setTitle("Treino");
+        appointment.setDescription("Treino de futebol");
+        appointment.setStartDateTime(LocalDateTime.of(2025, 7, 20, 19, 0));
+        appointment.setEndDateTime(LocalDateTime.of(2026, 7, 20, 19, 0));
+        appointment.setPriority(Priority.MEDIUM);
+        appointment.setStatus(Status.SCHEDULED);
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> appointmentService.saveAppointment(appointment)
+        );
+
+        assertEquals(
+                "Can't appoint a date before today",
+                exception.getMessage()
+        );
+
+        verify(appointmentRepository, never()).save(any());
+    }
+
+    @Test
+    void saveAppointmentWhereEndBeforeStart() {
+        AppointmentEntity appointment = new AppointmentEntity();
+        appointment.setTitle("Treino");
+        appointment.setDescription("Treino de futebol");
+        appointment.setStartDateTime(LocalDateTime.of(2026, 7, 30, 19, 0));
+        appointment.setEndDateTime(LocalDateTime.of(2025, 7, 20, 19, 0));
+        appointment.setPriority(Priority.MEDIUM);
+        appointment.setStatus(Status.SCHEDULED);
+
+        IllegalArgumentException exception = assertThrows(
+                IllegalArgumentException.class,
+                () -> appointmentService.saveAppointment(appointment)
+        );
+
+        assertEquals(
+                "End date/time must be after start date/time.",
+                exception.getMessage()
+        );
+
+        verify(appointmentRepository, never()).save(any());
+    }
+
+    @Test
     void findAll() {
         CategoryEntity category = new CategoryEntity(
                 UUID.fromString("14ed8a26-c601-40a1-b4e2-984ec2ca5400"),
@@ -96,9 +164,9 @@ class AppointmentServiceTest {
         List<AppointmentEntity> appointmentList = appointmentService.findAll();
 
         assertNotNull(appointmentList);
-        Assertions.assertEquals(2, appointmentList.size(), "The appointment list size should be 2");
-        Assertions.assertEquals("Treino", appointmentList.get(0).getTitle());
-        Assertions.assertEquals("Competição", appointmentList.get(1).getTitle());
+        assertEquals(2, appointmentList.size(), "The appointment list size should be 2");
+        assertEquals("Treino", appointmentList.get(0).getTitle());
+        assertEquals("Competição", appointmentList.get(1).getTitle());
 
     }
 
@@ -125,6 +193,6 @@ class AppointmentServiceTest {
         AppointmentEntity appointmentEntity = appointmentService.findById(appointment1.getId());
 
         assertNotNull(appointmentEntity);
-        Assertions.assertEquals("Treino", appointmentEntity.getTitle());
+        assertEquals("Treino", appointmentEntity.getTitle());
     }
 }

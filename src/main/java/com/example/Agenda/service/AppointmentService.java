@@ -6,6 +6,7 @@ import com.example.Agenda.Repository.AppointmentRepository;
 import com.example.Agenda.Repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,6 +22,14 @@ public class AppointmentService {
     }
 
     public void saveAppointment(AppointmentEntity appointment){
+        if (appointment.getStartDateTime().isEqual(appointment.getEndDateTime())){
+            throw new IllegalArgumentException("Start and End can't have the exactly same date");
+        }
+
+        if (appointment.getStartDateTime().isBefore(LocalDateTime.now())){
+            throw new IllegalArgumentException("Can't appoint a date before today");
+        }
+
         if (appointment.getEndDateTime().isBefore(appointment.getStartDateTime())){
             throw new IllegalArgumentException("End date/time must be after start date/time.");
         }
