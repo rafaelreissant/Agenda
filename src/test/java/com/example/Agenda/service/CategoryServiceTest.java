@@ -71,8 +71,4 @@ class CategoryServiceTest {
         assertEquals("Alice", categoryList.get(0).getTitle());
         assertEquals("Bob", categoryList.get(1).getTitle());
     }
-
-    @Test
-    void getUserNullById(){}
-
 }

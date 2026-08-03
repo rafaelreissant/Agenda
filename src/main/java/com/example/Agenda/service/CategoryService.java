@@ -2,6 +2,7 @@ package com.example.Agenda.service;
 
 import com.example.Agenda.Model.CategoryEntity;
 import com.example.Agenda.Repository.CategoryRepository;
+import com.example.Agenda.exceptions.CategoryNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +27,6 @@ public class CategoryService {
 
     public CategoryEntity findById(UUID id){
         return categoryRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Category not found"));
+                .orElseThrow(() -> new CategoryNotFoundException(id));
     }
 }

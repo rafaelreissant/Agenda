@@ -6,7 +6,7 @@ import com.example.Agenda.Model.AppointmentEntity;
 import com.example.Agenda.Model.CategoryEntity;
 import com.example.Agenda.Repository.AppointmentRepository;
 import com.example.Agenda.Repository.CategoryRepository;
-import org.junit.jupiter.api.Assertions;
+import com.example.Agenda.exceptions.InvalidAppointmentException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -43,14 +43,11 @@ class AppointmentServiceTest {
                 "Futebol"
         );
 
-        when(categoryRepository.findById(category.getId()))
-                .thenReturn(Optional.of(category));
-
         AppointmentEntity appointment = new AppointmentEntity();
         appointment.setTitle("Treino");
         appointment.setDescription("Treino de futebol");
-        appointment.setStartDateTime(LocalDateTime.of(2026, 7, 20, 19, 0));
-        appointment.setEndDateTime(LocalDateTime.of(2026, 7, 20, 21, 0));
+        appointment.setStartDateTime(LocalDateTime.of(2030, 7, 20, 19, 0));
+        appointment.setEndDateTime(LocalDateTime.of(2030, 7, 20, 21, 0));
         appointment.setPriority(Priority.MEDIUM);
         appointment.setStatus(Status.SCHEDULED);
         appointment.setCategoryEntity(category);
@@ -72,8 +69,8 @@ class AppointmentServiceTest {
         appointment.setPriority(Priority.MEDIUM);
         appointment.setStatus(Status.SCHEDULED);
 
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
+        InvalidAppointmentException exception = assertThrows(
+                InvalidAppointmentException.class,
                 () -> appointmentService.saveAppointment(appointment)
         );
 
@@ -95,8 +92,8 @@ class AppointmentServiceTest {
         appointment.setPriority(Priority.MEDIUM);
         appointment.setStatus(Status.SCHEDULED);
 
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
+        InvalidAppointmentException exception = assertThrows(
+                InvalidAppointmentException.class,
                 () -> appointmentService.saveAppointment(appointment)
         );
 
@@ -118,8 +115,8 @@ class AppointmentServiceTest {
         appointment.setPriority(Priority.MEDIUM);
         appointment.setStatus(Status.SCHEDULED);
 
-        IllegalArgumentException exception = assertThrows(
-                IllegalArgumentException.class,
+        InvalidAppointmentException exception = assertThrows(
+                InvalidAppointmentException.class,
                 () -> appointmentService.saveAppointment(appointment)
         );
 

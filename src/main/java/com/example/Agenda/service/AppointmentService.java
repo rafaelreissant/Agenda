@@ -4,6 +4,7 @@ import com.example.Agenda.Model.AppointmentEntity;
 import com.example.Agenda.Model.CategoryEntity;
 import com.example.Agenda.Repository.AppointmentRepository;
 import com.example.Agenda.Repository.CategoryRepository;
+import com.example.Agenda.exceptions.InvalidAppointmentException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -23,15 +24,15 @@ public class AppointmentService {
 
     public void saveAppointment(AppointmentEntity appointment){
         if (appointment.getStartDateTime().isEqual(appointment.getEndDateTime())){
-            throw new IllegalArgumentException("Start and End can't have the exactly same date");
+            throw new InvalidAppointmentException("Start and End can't have the exactly same date");
         }
 
         if (appointment.getStartDateTime().isBefore(LocalDateTime.now())){
-            throw new IllegalArgumentException("Can't appoint a date before today");
+            throw new InvalidAppointmentException("Can't appoint a date before today");
         }
 
         if (appointment.getEndDateTime().isBefore(appointment.getStartDateTime())){
-            throw new IllegalArgumentException("End date/time must be after start date/time.");
+            throw new InvalidAppointmentException("End date/time must be after start date/time.");
         }
 
         appointmentRepository.save(appointment);
@@ -39,10 +40,10 @@ public class AppointmentService {
 
     public AppointmentEntity addingCategoryToAppointment(String idAppointment, String idCategory){
         AppointmentEntity appointmentEntity = appointmentRepository.findById(UUID.fromString(idAppointment))
-                .orElseThrow(() -> new RuntimeException("Id Appointment not found"));
+                .orElseThrow(() -> new InvalidAppointmentException("Id Appointment not found"));
 
         CategoryEntity categoryEntity = categoryRepository.findById(UUID.fromString(idCategory))
-                .orElseThrow(() -> new RuntimeException("Id Category not found"));
+                .orElseThrow(() -> new InvalidAppointmentException("Id Category not found"));
 
         appointmentEntity.setCategoryEntity(categoryEntity);
 
@@ -55,6 +56,6 @@ public class AppointmentService {
     
     public AppointmentEntity findById(UUID id){
         return appointmentRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Appointment not found"));
+                .orElseThrow(() -> new InvalidAppointmentException("Appointment not found"));
     }
 }

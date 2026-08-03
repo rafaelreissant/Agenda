@@ -2,11 +2,10 @@ package com.example.Agenda.controller;
 
 import com.example.Agenda.Model.AppointmentEntity;
 import com.example.Agenda.controller.dto.AppointmentDTO;
-import com.example.Agenda.controller.dto.CategoryDTO;
 import com.example.Agenda.controller.mapper.AppointmentMapper;
 import com.example.Agenda.service.AppointmentService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -15,7 +14,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
-@Controller
+@RestController
 @RequestMapping("appointments")
 public class AppointmentController {
 
@@ -26,7 +25,7 @@ public class AppointmentController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createAppointment(@RequestBody AppointmentDTO appointmentDTO){
+    public ResponseEntity<Void> createAppointment(@Valid @RequestBody AppointmentDTO appointmentDTO){
         AppointmentEntity appointmentEntity = AppointmentMapper.toEntity(appointmentDTO);
         appointmentService.saveAppointment(appointmentEntity);
 
