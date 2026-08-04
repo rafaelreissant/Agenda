@@ -106,6 +106,7 @@ mvn spring-boot:run
 |---------|----------|
 | POST | `/categories` |
 | GET | `/categories` |
+| GET | `/categories/{id}` |
 
 ---
 
