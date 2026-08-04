@@ -98,6 +98,7 @@ mvn spring-boot:run
 | POST | `/appointments` |
 | GET | `/appointments` |
 | GET | `/appointments/{id}` |
+| PUT | `/appointments/{appointmentId}/category/{categoryId}` |
 
 ### Categories
 
